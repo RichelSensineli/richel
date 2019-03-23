@@ -12,13 +12,13 @@ import io.richel.curso.services.ClienteService;
 
 @RestController
 @RequestMapping(value="/clientes")
-public class ClienteRosource {
+public class ClienteResource {
 
 	@Autowired
 	private ClienteService clienteService;
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> find(@PathVariable Integer id){
+	public ResponseEntity<Cliente> find(@PathVariable Integer id){
 		
 		Cliente objeto = clienteService.buscar(id);
 		return ResponseEntity.ok().body(objeto);
