@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import io.richel.curso.domain.Categoria;
+import io.richel.curso.dto.CategoriaDTO;
 import io.richel.curso.repositories.CategoriaRepository;
 import io.richel.curso.services.exceptions.DataIntegrityException;
 import io.richel.curso.services.exceptions.ObjectNotFoundException;
@@ -59,5 +60,9 @@ public class CategoriaService {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		
 		return repository.findAll(pageRequest);
+	}
+	
+	public Categoria fromDTO(CategoriaDTO objetoDTO) {
+		return new Categoria(objetoDTO.getId(), objetoDTO.getNome());
 	}
 }
