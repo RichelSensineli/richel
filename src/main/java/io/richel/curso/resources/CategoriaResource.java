@@ -1,6 +1,8 @@
 package io.richel.curso.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.richel.curso.domain.Categoria;
+import io.richel.curso.dto.CategoriaDTO;
 import io.richel.curso.services.CategoriaService;
 
 @RestController
@@ -22,7 +25,7 @@ public class CategoriaResource {
 	private CategoriaService service;
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<Categoria> listar(@PathVariable Integer id) {
+	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
 		
 		Categoria objeto = service.find(id);
 		
@@ -52,5 +55,14 @@ public class CategoriaResource {
 		service.delete(id);
 		
 		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> findAll() {
+		
+		List<Categoria> list = service.findAll();
+		List<CategoriaDTO> listDTO = list.stream().map(objeto -> new CategoriaDTO(objeto)).collect(Collectors.toList());
+		
+		return ResponseEntity.ok().body(listDTO);
 	}
 }
