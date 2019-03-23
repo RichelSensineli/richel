@@ -3,10 +3,12 @@ package io.richel.curso.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import io.richel.curso.domain.Categoria;
 import io.richel.curso.repositories.CategoriaRepository;
+import io.richel.curso.services.exceptions.DataIntegrityException;
 import io.richel.curso.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -32,5 +34,16 @@ public class CategoriaService {
 		find(objeto.getId());
 		
 		return repository.save(objeto);
+	}
+
+	public void delete(Integer id) {
+		find(id);
+		
+		try {
+			repository.deleteById(id);
+			
+		}catch(DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excluir uma Categoria que possui Produtos.");
+		}
 	}
 }
