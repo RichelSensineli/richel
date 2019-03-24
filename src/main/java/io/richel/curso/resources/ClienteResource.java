@@ -1,5 +1,6 @@
 package io.richel.curso.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.richel.curso.domain.Cliente;
 import io.richel.curso.dto.ClienteDTO;
+import io.richel.curso.dto.ClienteNewDTO;
 import io.richel.curso.services.ClienteService;
 
 @RestController
@@ -69,5 +72,16 @@ public class ClienteResource {
 		Page<ClienteDTO> listDTO = list.map(objeto -> new ClienteDTO(objeto));
 		
 		return ResponseEntity.ok().body(listDTO);
+	}
+	
+	@RequestMapping(method=RequestMethod.POST)
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objetoDTO){
+		Cliente objeto = clienteService.fromDTO(objetoDTO);
+		objeto = clienteService.insert(objeto);
+		
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}").buildAndExpand(objeto.getId()).toUri();
+		
+		return ResponseEntity.created(uri).build();
 	}
 }
