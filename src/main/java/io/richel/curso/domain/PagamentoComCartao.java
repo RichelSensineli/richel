@@ -2,9 +2,12 @@ package io.richel.curso.domain;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import io.richel.curso.domain.enums.EstadoPagamento;
 
 @Entity
+@JsonTypeName("pagamentoComCartao")
 public class PagamentoComCartao extends Pagamento{
 	private static final long serialVersionUID = 8774508189182897417L;
 
