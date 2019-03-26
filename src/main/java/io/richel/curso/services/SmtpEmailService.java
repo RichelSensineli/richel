@@ -2,16 +2,22 @@ package io.richel.curso.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 
-public class MockEmailService extends AbstractEmailService{
+public class SmtpEmailService extends AbstractEmailService{
 
+	@Autowired
+	private MailSender mailSender;
+	
 	private static final Logger LOG = LoggerFactory.getLogger(MockEmailService.class);
 	
 	@Override
 	public void sendEmail(SimpleMailMessage msg) {
-		LOG.info("Simulando o envio de E-Mail...");
-		LOG.info(msg.toString());
+		LOG.info("Enviando E-Mail...");
+		mailSender.send(msg);
 		LOG.info("E-Mail enviado");
 	}
+
 }
