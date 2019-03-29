@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import io.richel.curso.domain.Cidade;
 import io.richel.curso.domain.Cliente;
 import io.richel.curso.domain.Endereco;
+import io.richel.curso.domain.enums.Perfil;
 import io.richel.curso.domain.enums.TipoCliente;
 import io.richel.curso.dto.ClienteDTO;
 import io.richel.curso.dto.ClienteNewDTO;
 import io.richel.curso.repositories.ClienteRepository;
 import io.richel.curso.repositories.EnderecoRepository;
+import io.richel.curso.security.UserSS;
+import io.richel.curso.services.exceptions.AuthorizationException;
 import io.richel.curso.services.exceptions.DataIntegrityException;
 import io.richel.curso.services.exceptions.ObjectNotFoundException;
 
@@ -36,6 +39,13 @@ public class ClienteService {
 	private BCryptPasswordEncoder bCrypt;
 	
 	public Cliente find(Integer id) {
+		
+		UserSS user = UserService.authenticated();
+		
+		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		
 		Optional<Cliente> objeto = clienteRepository.findById(id);
 		
 		return objeto.orElseThrow(() -> new ObjectNotFoundException(
