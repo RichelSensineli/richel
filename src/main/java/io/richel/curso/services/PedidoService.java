@@ -15,7 +15,6 @@ import io.richel.curso.domain.ItemPedido;
 import io.richel.curso.domain.PagamentoComBoleto;
 import io.richel.curso.domain.Pedido;
 import io.richel.curso.domain.enums.EstadoPagamento;
-import io.richel.curso.repositories.ClienteRepository;
 import io.richel.curso.repositories.ItemPedidoRepository;
 import io.richel.curso.repositories.PagamentoRepository;
 import io.richel.curso.repositories.PedidoRepository;
