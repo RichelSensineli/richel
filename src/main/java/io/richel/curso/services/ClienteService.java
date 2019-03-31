@@ -122,7 +122,21 @@ public class ClienteService {
 		newObjeto.setEmail(objeto.getEmail());
 	}
 	
-	public URI uploadProfilePicture(MultipartFile file) {
-		return s3Service.uploadFile(file);
+	public URI uploadProfilePicture(MultipartFile multiPartFile) {
+		
+		UserSS user = UserService.authenticated();
+		
+		if(user == null) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		
+		URI uri = s3Service.uploadFile(multiPartFile);
+		
+		Cliente cli = find(user.getId());
+		cli.setImageUrl(uri.toString());
+		
+		clienteRepository.save(cli);
+		
+		return uri;
 	}
 }
